@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+	<!--参考文档
+	   https://logback.qos.ch/manual/layouts.html
+	   https://github.com/spring-projects/spring-boot/blob/v1.3.1.RELEASE/spring-boot/src/main/resources/org/springframework/boot/logging/logback/base.xml
+	-->
+	<property name="LOG_PATH" value="${user.dir}/logs"/>
+
+	<appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+		<encoder>
+			<!--
+                颜色可选
+                "%black", "%red", "%green","%yellow","%blue", "%magenta","%cyan", "%white", "%gray",
+                "%boldRed","%boldGreen", "%boldYellow", "%boldBlue", "%boldMagenta","%boldCyan", "%boldWhite" and "%highlight" 。
+                例:%red(信息),则 信息 这两个字为红色
+                其它 %p 表示level,%t表示线程名
+            -->
+			<pattern>
+				%green(%d{yy-MM-dd HH:mm:ss.SSS}) %highlight(%5p) %magenta([%4.15t]) %cyan(%-40.40logger{39}) %M %boldMagenta(%3.3L) %blue(:) %m%n
+			</pattern>
+			<charset>UTF-8</charset>
+		</encoder>
+	</appender>
+
+
+	<appender name="info"  class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<File>${user.dir}/logs/info.log</File>
+		<rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+			<!-- daily rollover -->
+			<FileNamePattern>${user.dir}/logs/%d{yy-MM-dd}.%i.info.log</FileNamePattern>
+			<maxFileSize>10MB</maxFileSize>
+			<totalSizeCap>10GB</totalSizeCap>
+			<!-- keep 7 days' worth of history -->
+			<maxHistory>7</maxHistory>
+		</rollingPolicy>
+
+		<encoder>
+			<Pattern>
+				%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %-40.40logger{39} [%file:%line] - %msg%n
+			</Pattern>
+			<charset>UTF-8</charset>
+		</encoder>
+	</appender>
+
+	<root level="debug">
+		<appender-ref ref="CONSOLE" />
+		<appender-ref ref="info" />
+	</root>
+
+</configuration>  
